@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyTracker Pro - Dashboard Keuangan</title>
+    
+    <!-- Bootstrap 5.3.8 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="bi bi-wallet2"></i> MoneyTracker Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button class="btn btn-sm btn-light me-2" id="darkModeToggle" title="Dark Mode">
+                            <i class="bi bi-moon"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-download"></i> Export
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" onclick="exportPDF()"><i class="bi bi-filetype-pdf"></i> PDF</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="exportExcel()"><i class="bi bi-filetype-xlsx"></i> Excel</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="printLaporan()"><i class="bi bi-printer"></i> Print</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container -->
+    <div class="container-fluid py-4">
+        <!-- Alert Messages -->
+        <div id="alertContainer"></div>
+
+        <!-- Dashboard Statistik -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title text-muted mb-2">Total Saldo</h6>
+                                <h3 class="mb-0" id="totalSaldo">Rp 0</h3>
+                            </div>
+                            <div class="stat-icon bg-primary">
+                                <i class="bi bi-wallet-fill"></i>
+                            </div>
+                        </div>
+                        <small class="text-muted">Update real-time</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title text-muted mb-2">Total Pemasukan</h6>
+                                <h3 class="mb-0 text-success" id="totalPemasukan">Rp 0</h3>
+                            </div>
+                            <div class="stat-icon bg-success">
+                                <i class="bi bi-arrow-up-circle-fill"></i>
+                            </div>
+                        </div>
+                        <small class="text-muted">Semua waktu</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title text-muted mb-2">Total Pengeluaran</h6>
+                                <h3 class="mb-0 text-danger" id="totalPengeluaran">Rp 0</h3>
+                            </div>
+                            <div class="stat-icon bg-danger">
+                                <i class="bi bi-arrow-down-circle-fill"></i>
+                            </div>
+                        </div>
+                        <small class="text-muted">Semua waktu</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title text-muted mb-2">Jumlah Transaksi</h6>
+                                <h3 class="mb-0" id="totalTransaksi">0</h3>
+                            </div>
+                            <div class="stat-icon bg-info">
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                        </div>
+                        <small class="text-muted">Total semua transaksi</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row untuk Grafik dan Tombol -->
+        <div class="row mb-4">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Grafik Pemasukan vs Pengeluaran</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chartKeuangan"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Tambah Transaksi</h5>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-success w-100 mb-2" data-bs-toggle="modal" data-bs-target="#modalTransaksi" onclick="resetForm()">
+                            <i class="bi bi-plus-lg"></i> Pemasukan Baru
+                        </button>
+                        <button class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modalTransaksi" onclick="resetForm('pengeluaran')">
+                            <i class="bi bi-dash-lg"></i> Pengeluaran Baru
+                        </button>
+
+                        <hr class="my-3">
+
+                        <h6 class="mb-3"><i class="bi bi-funnel"></i> Filter Transaksi</h6>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Jenis Transaksi</label>
+                            <select class="form-select form-select-sm" id="filterJenis">
+                                <option value="">Semua</option>
+                                <option value="pemasukan">Pemasukan</option>
+                                <option value="pengeluaran">Pengeluaran</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Dari Tanggal</label>
+                            <input type="date" class="form-control form-control-sm" id="filterTanggalMulai">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Sampai Tanggal</label>
+                            <input type="date" class="form-control form-control-sm" id="filterTanggalAkhir">
+                        </div>
+
+                        <button class="btn btn-primary btn-sm w-100 mb-2" onclick="applyFilter()">
+                            <i class="bi bi-search"></i> Terapkan Filter
+                        </button>
+                        <button class="btn btn-secondary btn-sm w-100" onclick="resetFilter()">
+                            <i class="bi bi-arrow-clockwise"></i> Reset Filter
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabel Transaksi -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-table"></i> Daftar Transaksi</h5>
+                        <input type="text" class="form-control form-control-sm" id="searchTransaksi" placeholder="Cari transaksi..." style="max-width: 250px;">
+                    </div>
+                    <div class="card-body">
+                        <div id="tableContainer">
+                            <div class="text-center py-5">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <nav aria-label="Pagination" class="mt-4">
+                            <ul class="pagination justify-content-center" id="pagination">
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah/Edit Transaksi -->
+    <div class="modal fade" id="modalTransaksi" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Tambah Transaksi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formTransaksi" onsubmit="saveTransaksi(event)">
+                    <div class="modal-body">
+                        <input type="hidden" id="transaksiId">
+
+                        <div class="mb-3">
+                            <label class="form-label">Jenis Transaksi <span class="text-danger">*</span></label>
+                            <select class="form-select" id="jenisTransaksi" required>
+                                <option value="">Pilih Jenis</option>
+                                <option value="pemasukan">Pemasukan</option>
+                                <option value="pengeluaran">Pengeluaran</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="tanggal" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Kategori <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="kategori" placeholder="Contoh: Gaji, Belanja, dll" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Deskripsi</label>
+                            <textarea class="form-control" id="deskripsi" rows="2" placeholder="Keterangan tambahan..."></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Nominal <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nominal" placeholder="Rp 0" required oninput="formatCurrencyInput(this)">
+                            <small class="text-muted">Hanya angka, akan otomatis diformat</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Metode Pembayaran</label>
+                            <select class="form-select" id="metode">
+                                <option value="">Pilih Metode</option>
+                                <option value="Tunai">Tunai</option>
+                                <option value="Debit Card">Debit Card</option>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="Transfer Bank">Transfer Bank</option>
+                                <option value="E-Wallet">E-Wallet</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detail Transaksi -->
+    <div class="modal fade" id="modalDetail" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Transaksi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="detailContent">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-warning" id="btnEdit" onclick="editTransaksiFromDetail()">
+                        <i class="bi bi-pencil"></i> Edit
+                    </button>
+                    <button type="button" class="btn btn-danger" id="btnHapus" onclick="hapusTransaksiFromDetail()">
+                        <i class="bi bi-trash"></i> Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

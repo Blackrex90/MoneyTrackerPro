@@ -1,0 +1,121 @@
+# =========================
+# OS GENERATED FILES
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# IDE / EDITOR
+# =========================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# =========================
+# LOG FILES
+# =========================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# ENVIRONMENT FILES
+# =========================
+.env
+.env.local
+.env.production
+.env.development
+
+# =========================
+# PHP / COMPOSER
+# =========================
+vendor/
+composer.lock
+
+# =========================
+# NODE MODULES
+# =========================
+node_modules/
+
+# =========================
+# CACHE FILES
+# =========================
+.cache/
+.tmp/
+temp/
+tmp/
+
+# =========================
+# SESSION FILES
+# =========================
+sessions/
+*.session
+
+# =========================
+# UPLOAD FILES
+# =========================
+uploads/
+storage/
+public/uploads/
+
+# =========================
+# DATABASE FILES
+# =========================
+
+*.sqlite
+*.sqlite3
+database_backup/
+backup/
+
+# =========================
+# EXPORT FILES
+# =========================
+exports/
+*.csv
+*.xlsx
+*.pdf
+
+# =========================
+# BUILD FILES
+# =========================
+dist/
+build/
+
+# =========================
+# TEST FILES
+# =========================
+coverage/
+.phpunit.result.cache
+
+# =========================
+# GENERATED ASSETS
+# =========================
+*.map
+
+# =========================
+# LOCAL CONFIG
+# =========================
+config/local.php
+config/database.local.php
+
+# =========================
+# SECURITY
+# =========================
+secret/
+private/
+keys/
+*.pem
+
+# =========================
+# MISC
+# =========================
+*.bak
+*.tmp
+*.old
