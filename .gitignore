@@ -68,8 +68,6 @@ public/uploads/
 # =========================
 # DATABASE FILES
 # =========================
-# Jangan ignore database.sql utama project
-# agar mudah di-import oleh pengguna lain
 
 *.sqlite
 *.sqlite3
