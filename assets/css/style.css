@@ -1,3 +1,35 @@
+/* ===================================================== */
+/* MoneyTracker Pro - Custom CSS Styling */
+/* ===================================================== */
+
+:root {
+    --primary-color: #007bff;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --dark-color: #343a40;
+    --light-color: #f8f9fa;
+    --border-color: #dee2e6;
+}
+
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    overflow-x: hidden;
+}
+
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+/* Navbar Styling */
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 /* =====================================================
    MoneyTracker Pro - Custom CSS
    ===================================================== */
@@ -72,6 +104,45 @@ body.dark-mode ::-webkit-scrollbar-thumb {
     letter-spacing: 0.5px;
 }
 
+.navbar .btn-light {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.navbar .btn-light:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Card Styling */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-mode .card {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+/* Stat Card */
+.stat-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    border-left: 4px solid var(--primary-color);
+}
+
+body.dark-mode .stat-card {
+    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    border-left-color: var(--primary-color);
 .navbar-brand i {
     margin-right: 0.5rem;
 }
